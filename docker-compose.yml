@@ -1,0 +1,36 @@
+version: '3.5'
+services:
+
+  api:
+    build:
+      context: ./backend
+      target: development
+    restart: always
+    environment:
+      - APP_ID=api
+    env_file:
+      - ./config/local.env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: ./node_modules/.bin/nodemon -L node ./app/api/index.js
+
+  postgres:
+    image: postgres:11
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_PASSWORD=main
+      - POSTGRES_USER=main
+      - POSTGRES_DB=main
+
+volumes:
+  postgres_data:
+    driver: local

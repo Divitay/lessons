@@ -1,0 +1,37 @@
+{
+  "name": "lesson",
+  "version": "0.0.1",
+  "description": "lessons tasks",
+  "main": "index.js",
+  "dependencies": {
+    "bluebird": "3.5.1",
+    "joi": "14.0.0",
+    "kcors": "2.2.2",
+    "knex": "0.16.5",
+    "koa": "2.5.3",
+    "koa-bodyparser": "4.2.1",
+    "koa-router": "7.4.0",
+    "pg": "7.4.3"
+  },
+  "devDependencies": {
+    "eslint": "5.1.0",
+    "eslint-config-standard": "12.0.0-alpha.0",
+    "eslint-plugin-import": "2.13.0",
+    "eslint-plugin-node": "6.0.1",
+    "eslint-plugin-promise": "3.8.0",
+    "eslint-plugin-standard": "3.1.0",
+    "nodemon": "1.18.3"
+  },
+  "scripts": {
+    "start-api": "node ./app/api/index.js",
+    "lint": "./node_modules/.bin/eslint ./",
+    "test": "",
+    "migrate-make": "./node_modules/.bin/knex migrate:make --knexfile=./config/knex.js",
+    "migrate-rollback": "./node_modules/.bin/knex migrate:rollback --knexfile=./config/knex.js",
+    "migrate-latest": "./node_modules/.bin/knex migrate:latest --knexfile=./config/knex.js",
+    "seed-make": "./node_modules/.bin/knex seed:make --knexfile=./config/knex.js",
+    "seed": "./node_modules/.bin/knex seed:run --knexfile=./config/knex.js"
+  },
+  "author": "Dmitry",
+  "license": "ISC"
+}

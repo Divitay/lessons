@@ -1,0 +1,9 @@
+{
+    "extends": "standard",
+    "rules": {
+        "curly": ["error", "all"],
+        "object-curly-spacing": ["error", "always"],
+        "brace-style": ["error", "1tbs"],
+        "prefer-const": "error"
+    }
+  }

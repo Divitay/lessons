@@ -12,7 +12,7 @@ module.exports = (LessonService) => {
 
     const sortBy = DEFAULTS.SORT_BY // 'desc'
     const orderBy = DEFAULTS.ORDER_BY // 'id'
-    const perPage = filters.perPage || DEFAULTS.LESSONS_PER_PAGE // 5
+    const perPage = filters.lessonsPerPage || DEFAULTS.LESSONS_PER_PAGE // 5
     const page = filters.page || DEFAULTS.PAGE // 1
     const offset = ((page - 1) * perPage)
 
@@ -83,6 +83,11 @@ module.exports = (LessonService) => {
       query = query
         .innerJoin(`${TABLE.LESSON_TEACHERS} as lesson_teachers`, `lessons.id`, `lesson_teachers.lesson_id`)
         .whereIn('lesson_teachers.teacher_id', filters.teacherIds)
+    }
+
+    if (filters.status) {
+      query = query
+        .where('lessons.status', filters.status)
     }
 
     return query

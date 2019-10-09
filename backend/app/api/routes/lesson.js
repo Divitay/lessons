@@ -11,7 +11,7 @@ router.get('/',
     'status': Joi.number().min(0).max(1),
     'teacherIds': Joi.string(), // 1,2,3
     'studentsCount': Joi.string(),
-    'page': Joi.number().default(di.lessonService.consts.DEFAULTS.PAGE),
+    'page': Joi.number().integer().min(di.lessonService.consts.DEFAULTS.PAGE),
     'lessonsPerPage': Joi.number().integer()
       .min(di.lessonService.consts.DEFAULTS.MIN_LESSONS_PER_PAGE)
       .max(di.lessonService.consts.DEFAULTS.MAX_LESSONS_PER_PAGE)

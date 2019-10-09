@@ -17,16 +17,18 @@ module.exports = (LessonService) => {
     const offset = ((page - 1) * perPage)
 
     let query = trx(`${TABLE.LESSONS} as lessons`)
-      .select('lessons.*', 'lesson_students.count_visitors', 'students.students_arr as students', 'teachers.teachers_arr as teachers')
+      .select('lessons.*', 'lesson_students.visit_count', 'students.students_arr as students', 'teachers.teachers_arr as teachers')
       .innerJoin(trx.raw(`
             (
               SELECT
-                COUNT(*) as count_visitors,
+                COUNT(*) as visit_count,
                 lesson_id 
-                FROM
+              FROM
                   ${TABLE.LESSON_STUDENTS} AS lesson_students
-                GROUP BY 
-                  lesson_id
+              WHERE
+                visit = TRUE
+              GROUP BY 
+                lesson_id
             ) AS lesson_students ON lessons.id = lesson_students.lesson_id
           `))
       .innerJoin(trx.raw(`
@@ -83,6 +85,30 @@ module.exports = (LessonService) => {
       query = query
         .innerJoin(`${TABLE.LESSON_TEACHERS} as lesson_teachers`, `lessons.id`, `lesson_teachers.lesson_id`)
         .whereIn('lesson_teachers.teacher_id', filters.teacherIds)
+    }
+
+    if (filters.studentsCount) {
+      const studentsCount = filters.studentsCount.split(',')
+      query = query
+        .innerJoin(trx.raw(`
+          (
+            SELECT
+              COUNT(*) as subscribe_count,
+              lesson_id 
+            FROM
+                ${TABLE.LESSON_STUDENTS} AS lesson_students
+            GROUP BY 
+              lesson_id
+          ) AS students_sub_on_lesson ON lessons.id = students_sub_on_lesson.lesson_id
+        `))
+      if (studentsCount.length > 1) {
+        query = query
+          .where('students_sub_on_lesson.subscribe_count', '>=', studentsCount[0])
+          .where('students_sub_on_lesson.subscribe_count', '<=', studentsCount[1])
+      } else {
+        query = query
+          .where('students_sub_on_lesson.subscribe_count', '=', studentsCount[0])
+      }
     }
 
     if (filters.status) {
